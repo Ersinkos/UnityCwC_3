@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
     public bool isOnGround = true;
     public bool gameOver = false;
+    public bool doubleJump = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +30,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver || Input.GetKeyDown(KeyCode.Space) && doubleJump)
         {
+            doubleJump = !doubleJump;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
             playerAnim.SetTrigger("Jump_trig");
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             isOnGround = true;
+            doubleJump = false;
             dirtParticle.Play();
         }
         if (collision.gameObject.CompareTag("Obstacle"))
